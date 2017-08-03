@@ -53,7 +53,7 @@ function Compare-HackedPasswords {
         $StringBuilder = New-Object System.Text.StringBuilder 
         [System.Security.Cryptography.HashAlgorithm]::Create('SHA1').ComputeHash([System.Text.Encoding]::UTF8.GetBytes($Password)) |
             ForEach-Object { 
-                [Void]$StringBuilder.Append($_.ToString("x2")) 
+                [Void]$StringBuilder.Append($_.ToString('x2')) 
             }
         $Password = $null # Void out user's password since it's no longer used
         $Hash = $StringBuilder.ToString()
