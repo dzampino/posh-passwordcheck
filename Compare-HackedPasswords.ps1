@@ -3,28 +3,20 @@ function Compare-HackedPasswords {
     <#
     .SYNOPSIS
         Tests a password to see if it has been previously hacked
-
     .DESCRIPTION
         Creates a SHA1 of a string and compares it to Troy Hunt's list of exposed passwords found here: https://haveibeenpwned.com/Passwords
-
     .PARAMETER Password
         Password string to be checked
-
     .PARAMETER PasswordDatabasePath
         Location of password database file
-
     .INPUTS
         System.String
-
     .OUTPUTS
         System.Boolean
-
     .EXAMPLE
         Compare-HackedPasswords -Password 'pa$$word'
-
     .LINK
         https://github.com/dzampino/posh-passwordcheck
-
     .NOTES
         To-do: 
         Optimize search (possibly by optimizing database)
