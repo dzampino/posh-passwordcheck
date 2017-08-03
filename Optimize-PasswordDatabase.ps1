@@ -30,9 +30,9 @@ function Optimize-PasswordDatabase {
         [Parameter(Mandatory=$false,
                    ValueFromPipelineByPropertyName=$true,
                    Position=1)]
-        [ValidateRange(0,39)]
+        [ValidateRange(1,40)]
         [int]
-        $OptimizationLevel = 2
+        $OptimizationLevel = 1
     )
     begin {
         Set-StrictMode -Version Latest
