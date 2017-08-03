@@ -1,32 +1,35 @@
-function Get-USCitizenCapability {
+#Requires -Version 3.0
+function Compare-HackedPasswords {
     <#
     .SYNOPSIS
-        A brief description of the function or script.
+        Tests a password to see if it has been previously hacked
 
     .DESCRIPTION
-        A longer description.
+        Creates a SHA1 of a string and compares it to Troy Hunt's list of exposed passwords found here: https://haveibeenpwned.com/Passwords
 
-    .PARAMETER FirstParameter
-        Description of each of the parameters
+    .PARAMETER Password
+        Password string to be checked
 
-    .PARAMETER SecondParameter
-        Description of each of the parameters
+    .PARAMETER PasswordDatabasePath
+        Location of password database file
 
     .INPUTS
-        Description of objects that can be piped to the script
+        System.String
 
     .OUTPUTS
-        Description of objects that are output by the script
+        System.Boolean
 
     .EXAMPLE
-        Example of how to run the script
+        Compare-HackedPasswords -Password 'pa$$word'
 
     .LINK
-        Links to further documentation
+        https://github.com/dzampino/posh-passwordcheck
 
     .NOTES
-        Detail on what the script does, if this is needed
-
+        To-do: 
+        Optimize search (possibly by optimizing database)
+        Security considerations?
+        Accept SHA1 hash directly as well as string
     #>
     [CmdletBinding()]
     [OutputType([bool])]
@@ -35,26 +38,36 @@ function Get-USCitizenCapability {
                    ValueFromPipelineByPropertyName=$true,
                    Position=0)]
         [string]
-        $Password
+        $Password,
+        [Parameter(Mandatory=$false,
+                   Position=1)]
+        [string]
+        $PasswordDatabasePath = "$PSScriptRoot\pwned-passwords-1.0.txt"
     )
     begin {
         Set-StrictMode -Version Latest
-        $ErrorActionPreference = "Stop"
+        $ErrorActionPreference = 'Stop'
+        $Result = $false
     }
     process {
-        $Hash = Get-FileHash -
-
-        $Capabilities = @{
-            MilitaryService = $false
-            DrinkAlcohol = $false
-            Vote = $false
+        $StringBuilder = New-Object System.Text.StringBuilder 
+        [System.Security.Cryptography.HashAlgorithm]::Create('SHA1').ComputeHash([System.Text.Encoding]::UTF8.GetBytes($Password)) |
+            ForEach-Object { 
+                [Void]$StringBuilder.Append($_.ToString("x2")) 
+            }
+        $Password = $null # Void out user's password since it's no longer used
+        $Hash = $StringBuilder.ToString()
+        $Hash = $Hash.ToUpper()        
+        $Passwords = New-Object System.IO.StreamReader -ArgumentList $PasswordDatabasePath
+        while ($Line = $Passwords.ReadLine()) {
+            if ($Line -eq $Hash) {
+                $Result = $true
+                Break
+            }
         }
-
-        if ($Age -ge 18) {
-            $Capabilities['MilitaryService'] = $true
-            $Capabilities['Vote'] = $true
-        }
-
-        New-Object -Property $Capabilities -TypeName psobject
+    }    
+    end {        
+        $Hash = $null        
+        $Result
     }
 }
