@@ -32,7 +32,7 @@ function Optimize-PasswordDatabase {
                    Position=1)]
         [ValidateRange(1,40)]
         [int]
-        $OptimizationLevel = 1
+        $OptimizationLevel = 2
     )
     begin {
         Set-StrictMode -Version Latest
@@ -50,7 +50,10 @@ function Optimize-PasswordDatabase {
     process {       
         $Passwords = New-Object System.IO.StreamReader -ArgumentList $Path
         while ($Line = $Passwords.ReadLine()) {
-            # Code to read and separate data goes here
+            Add-Content -Value $Line -Path "$PSScriptRoot\db\$($Line.Substring(0,$OptimizationLevel))"
         }
+    }
+    end {
+        $Passwords.Close()
     }
 }

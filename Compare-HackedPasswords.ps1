@@ -56,9 +56,10 @@ function Compare-HackedPasswords {
                 $Result = $true
                 Break
             }
-        }
+        }        
     }    
-    end {        
+    end {
+        $Passwords.Close()        
         $Hash = $null        
         $Result
     }
