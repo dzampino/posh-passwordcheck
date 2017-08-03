@@ -38,7 +38,7 @@ function Optimize-PasswordDatabase {
         Set-StrictMode -Version Latest
         $ErrorActionPreference = 'Stop'
         try {
-            if (!(Test-Path "$PSScriptRoot\db") {
+            if (!(Test-Path "$PSScriptRoot\db")) {
                 New-Item -Path $PSScriptRoot -Name db -ItemType Directory
             }
         }
