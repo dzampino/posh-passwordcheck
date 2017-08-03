@@ -4,7 +4,7 @@ function Optimize-PasswordDatabase {
     .SYNOPSIS
         Optimize the large password text file by breaking up into smaller files
     .DESCRIPTION
-        Read the contents of the password file and sort each entry into a separate file by the first two (default) hex characters. Will create 256 smaller files which will allow for faster searching.
+        Read the contents of the password file and sort each entry into a separate file by the first two (default) hex characters. Will create a dirctory called db and will create 256 smaller files (if optimization is set to 2) in that directory which will allow for faster searching.
     .PARAMETER Path
         Location of password database file
     .PARAMETER OptimizationLevel
