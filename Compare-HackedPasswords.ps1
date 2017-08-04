@@ -39,7 +39,7 @@ function Compare-HackedPasswords {
                    ValueFromPipelineByPropertyName=$true,
                    Position=2)]
         [int]
-        $BlockSize = 4096
+        $ReadCount = 4096
     )
     begin {
         Set-StrictMode -Version Latest
@@ -55,7 +55,7 @@ function Compare-HackedPasswords {
         $Password = $null # Void out user's password since it's no longer used
         $Hash = $StringBuilder.ToString()
         $Hash = $Hash.ToUpper()
-        Get-Content -Path $PasswordDatabasePath -ReadCount $BlockSize |
+        Get-Content -Path $PasswordDatabasePath -ReadCount $ReadCount |
             ForEach-Object {
                 if ($_ -eq "$Hash") {
                     $true
