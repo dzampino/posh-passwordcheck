@@ -34,7 +34,12 @@ function Compare-HackedPasswords {
         [Parameter(Mandatory=$false,
                    Position=1)]
         [string]
-        $PasswordDatabasePath = "$PSScriptRoot\pwned-passwords-1.0.txt"
+        $PasswordDatabasePath = "$PSScriptRoot\pwned-passwords-1.0.txt",
+        [Parameter(Mandatory=$false,
+                   ValueFromPipelineByPropertyName=$true,
+                   Position=2)]
+        [int]
+        $BlockSize = 4096
     )
     begin {
         Set-StrictMode -Version Latest
@@ -49,18 +54,14 @@ function Compare-HackedPasswords {
             }
         $Password = $null # Void out user's password since it's no longer used
         $Hash = $StringBuilder.ToString()
-        $Hash = $Hash.ToUpper()        
-        $Passwords = New-Object System.IO.StreamReader -ArgumentList $PasswordDatabasePath
-        while ($Line = $Passwords.ReadLine()) {
-            if ($Line -eq $Hash) {
-                $Result = $true
-                Break
+        $Hash = $Hash.ToUpper()
+        Get-Content -Path $PasswordDatabasePath -ReadCount $BlockSize |
+            ForEach-Object {
+                if ($_ -eq "$Hash") {
+                    $true
+                    Break
+                }
             }
-        }        
-    }    
-    end {
-        $Passwords.Close()        
-        $Hash = $null        
-        $Result
+        $false
     }
 }
