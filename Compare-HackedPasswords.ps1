@@ -39,7 +39,7 @@ function Compare-HackedPasswords {
                    ValueFromPipelineByPropertyName=$true,
                    Position=2)]
         [int]
-        $ReadCount = 4096
+        $ReadCount = 2000
     )
     begin {
         Set-StrictMode -Version Latest
