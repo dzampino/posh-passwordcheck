@@ -44,7 +44,6 @@ function Compare-HackedPasswords {
     begin {
         Set-StrictMode -Version Latest
         $ErrorActionPreference = 'Stop'
-        $Result = $false
     }
     process {
         $StringBuilder = New-Object System.Text.StringBuilder 
